@@ -1,6 +1,49 @@
 
 class Mic1{
 
+    constructor(){
+        this.registers = {
+            PC: 0,  // Program Counter
+            AC: 0,  // Accumulator
+            SP: 0,  // Stack Pointer
+            IR: 0,  // Memory Instruction Register
+            TIR: 0, // Temporary Instruction Register
+            "0": 0, // Zero
+            "+1": 0, // Plus One
+            "-1": 0, // Minus One
+            AMASK: 0, // Adress Mask
+            SMASK: 0, // Stack Mask
+            A: 0,    // A Register
+            B: 0,    // B Register
+            C: 0,    // C Register
+            D: 0,    // D Register
+            E: 0,    // E Register
+            F: 0,    // F Register
+            MAR: 0,  // Memory Address Register
+            MBR: 0,  // Memory Buffer Register
+            AMUX: 0,
+            ALU: [0,0], 
+            Shifter: 0,
+            ALatch: 0,
+            BLatch: 0,
+            N: 0, // Minus One
+            Z: 0, // Minus One
+        };
+
+        // Memória
+        this.memory = new Array(256).fill(0); 
+    }
+
+    ALU(op, input1, input2) {
+        switch (op) {
+            case 'ADD': return input1 + input2;
+            case 'SUB': return input1 - input2;
+            case 'AND': return input1 & input2;
+            case 'OR': return input1 | input2;
+            default: return 0;
+        }
+    }
+    
     // Unidade de Controle - Função para executar uma microinstrução
     execMicroInst(microOp) {
         switch (microOp) {
@@ -166,21 +209,21 @@ class Mic1{
         this.execMicroInst('PC <- PC + 1'); // Avança o contador de programa
     }
 
-    // // Teste de Simulação
-    // testSimulation() {
-    //     this.memory[0] = 10;  // Endereço de teste para LOAD e ADD
-    //     this.memory[1] = 20;  // Outro endereço de teste para operações de memória
+    // Teste de Simulação
+    testSimulation() {
+        this.memory[0] = 10;  // Endereço de teste para LOAD e ADD
+        this.memory[1] = 20;  // Outro endereço de teste para operações de memória
 
-    //     this.registers.PC = 0;  // Definir contador de programa para o endereço 0
-    //     this.execMacroInst('LODD', 0);  // Carregar valor do endereço 0 para AC
-    //     console.log("Valor de AC após LODD:", this.registers.AC);  // Deve exibir 10
+        this.registers.PC = 0;  // Definir contador de programa para o endereço 0
+        this.execMacroInst('LODD', 0);  // Carregar valor do endereço 0 para AC
+        console.log("Valor de AC após LODD:", this.registers.AC);  // Deve exibir 10
 
-    //     this.execMacroInst('ADDD', 1);  // Soma o valor do endereço 1 ao AC
-    //     console.log("Valor de AC após ADDD:", this.registers.AC);  // Deve exibir 30
+        this.execMacroInst('ADDD', 1);  // Soma o valor do endereço 1 ao AC
+        console.log("Valor de AC após ADDD:", this.registers.AC);  // Deve exibir 30
 
-    //     this.execMacroInst('STOD', 2);  // Armazena o valor de AC no endereço 2
-    //     console.log("Valor de Memory[2] após STOD:", this.memory[2]);  // Deve exibir 30
-    // }
+        this.execMacroInst('STOD', 2);  // Armazena o valor de AC no endereço 2
+        console.log("Valor de Memory[2] após STOD:", this.memory[2]);  // Deve exibir 30
+    }
 }
 
 class SimulatorGUI {
