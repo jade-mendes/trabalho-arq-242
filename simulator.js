@@ -233,37 +233,13 @@ class Mic1{
         }
         this.execMicroInst('PC <- PC + 1'); // Avança o contador de programa
     }
-
-    // Teste de Simulação
-    testSimulation() {
-        this.memory[0] = 10;  // Endereço de teste para LOAD e ADD
-        this.memory[1] = 20;  // Outro endereço de teste para operações de 
-        let instructions = [
-            ['LODD', 0],
-            ['ADDD', 1],
-            ['STOD', 6],
-        ]
-
-        this.registers.PC = 0;  // Definir contador de programa para o endereço 0
-        
-        instructions.forEach((inst)=> {
-            this.execMacroInst(inst[0], inst[1]);
-        })
-
-        // this.execMacroInst('LODD', 0);  // Carregar valor do endereço 0 para AC
-        // console.log("Valor de AC após LODD:", this.registers.AC);  // Deve exibir 10
-
-        // this.execMacroInst('ADDD', 1);  // Soma o valor do endereço 1 ao AC
-        // console.log("Valor de AC após ADDD:", this.registers.AC);  // Deve exibir 30
-
-        // this.execMacroInst('STOD', 6);  // Armazena o valor de AC no endereço 2
-        // console.log("Valor de Memory[2] após STOD:", this.memory[2]);  // Deve exibir 30
-    }
 }
 
 class SimulatorGUI {
-    constructor(simulator) {
+    constructor(simulator, history) {
         this.simulator = simulator;
+        this.history = history;
+        this.historyIndex = 0;
         this.createWidgets();
     }
 
@@ -291,13 +267,66 @@ class SimulatorGUI {
             memoryDiv.appendChild(span);
         }
     }
+
+    loadHistory(index = 0){
+        let instance = this.history.getInstance(index);
+        console.log(instance);
+        this.historyIndex = index;
+        this.simulator.memory = instance.memory;
+        this.simulator.registers = instance.registers;
+    }
+
+    navigateHistory(offset = 1){
+        try {
+            let instance = this.history.getInstance(this.historyIndex + offset);
+            this.historyIndex += offset;
+            this.simulator.memory = instance.memory;
+            this.simulator.registers = instance.registers;
+            this.updateMemory();
+            this.updateRegisters();
+        } catch (error) {
+            console.log("Fora do intervalo do histórico!");
+        }
+    }
+
+    testSimulation() {
+        this.simulator.memory[0] = 10;  // Endereço de teste para LOAD e ADD
+        this.simulator.memory[1] = 20;  // Outro endereço de teste para operações de 
+        let instructions = [
+            ['LODD', 0],
+            ['ADDD', 1],
+            ['STOD', 6],
+        ]
+
+        this.simulator.registers.PC = 0;  // Definir contador de programa para o endereço 0
+        
+        history.clear();
+
+        instructions.forEach((inst)=> {
+            history.addInstance(this.simulator.registers, this.simulator.memory);
+            this.simulator.execMacroInst(inst[0], inst[1]);
+        })
+        history.addInstance(this.simulator.registers, this.simulator.memory);
+        this.loadHistory(0);
+
+        history.log();
+    }
 }
 
 const mic2 = new Mic1();
-const gui = new SimulatorGUI(mic2);
+const history = new History();
+const gui = new SimulatorGUI(mic2, history);
 runBT = document.querySelector("#runBt");
 runBT.onclick = () => {
-    mic2.testSimulation();
+    gui.testSimulation();
     gui.updateRegisters();
     gui.updateMemory();
+}
+stepBT = document.querySelector("#stepBt");
+stepBT.onclick = (e) => {
+    gui.navigateHistory(1);
+}
+backBT = document.querySelector("#backBt");
+backBT.onclick = (e) => {
+    gui.navigateHistory(-1);
 }
