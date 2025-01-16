@@ -1,7 +1,65 @@
+:root{
+    --primary-text-color: #fff;
+    --body-bg-color: #222;
+    --primary-accent-color: #9700F5;
+    --font-family: Alata, Roboto, sans-serif;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #222;
-    color: #fff;
+    font-family: var(--font-family);
+    background-color: var(--body-bg-color);
+    color: var(--primary-text-color);
+}
+
+.container{
+    display: block;
+    width: 100%;
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+.container-controller{
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 10px 16px;
+    position: relative;
+}
+
+.controller::after{
+    content: "";
+    position: absolute;
+    bottom: 0;
+    /* width: 100%; */
+    left: 0; right: 0;
+    height: 5px;
+    background-color: var(--primary-accent-color);
+    transform: scaleX(var(--progress, 0));
+    transform-origin: left;
+    transition: transform .3s;
+}
+
+.container-main{
+    display: flex;
+    justify-content: space-between;
+}
+
+button{
+    border: none;
+    border-radius: 5px;
+    background-color: var(--primary-accent-color);
+    color: var(--primary-text-color);
+    font-family: var(--font-family);
+    line-height: 1;
+    font-size: 1rem;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: filter .3s;
+}
+
+button:hover,
+button:focus-visible{
+    filter: brightness(.9);
 }
 
 #registers, #memory {
@@ -16,5 +74,5 @@ body {
 }
 
 span em {
-    color: #9700F5;
+    color: var(--primary-accent-color);
 }

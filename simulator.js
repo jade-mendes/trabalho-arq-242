@@ -2,7 +2,7 @@
 class Mic1{
 
     constructor(){
-        this.registers = {
+        this.initialRegisters = {
             PC: 0,  // Program Counter
             AC: 0,  // Accumulator
             SP: 0,  // Stack Pointer
@@ -31,7 +31,15 @@ class Mic1{
         };
 
         // Memória
-        this.memory = new Array(256).fill(0); 
+        this.initialMemory = new Array(256).fill(0); 
+
+        this.registers = { ...this.initialRegisters };
+        this.memory = [...this.initialMemory];
+    }
+
+    reset(){
+        this.registers = { ...this.initialRegisters }; 
+        this.memory = [...this.initialMemory];
     }
 
     ALU(op) {
@@ -279,9 +287,9 @@ class SimulatorGUI {
     navigateHistory(offset = 1){
         try {
             let instance = this.history.getInstance(this.historyIndex + offset);
-            this.historyIndex += offset;
             this.simulator.memory = instance.memory;
             this.simulator.registers = instance.registers;
+            this.historyIndex += offset;
             this.updateMemory();
             this.updateRegisters();
         } catch (error) {
@@ -290,6 +298,7 @@ class SimulatorGUI {
     }
 
     testSimulation() {
+        this.simulator.reset();
         this.simulator.memory[0] = 10;  // Endereço de teste para LOAD e ADD
         this.simulator.memory[1] = 20;  // Outro endereço de teste para operações de 
         let instructions = [
@@ -316,17 +325,24 @@ class SimulatorGUI {
 const mic2 = new Mic1();
 const history = new History();
 const gui = new SimulatorGUI(mic2, history);
+HeaderStyle = document.querySelector(".controller").style;
+
 runBT = document.querySelector("#runBt");
 runBT.onclick = () => {
     gui.testSimulation();
     gui.updateRegisters();
     gui.updateMemory();
+    HeaderStyle.setProperty('--progress', 0);
 }
 stepBT = document.querySelector("#stepBt");
 stepBT.onclick = (e) => {
     gui.navigateHistory(1);
+    let progress = (1 / ((history.instances.length-1) / (gui.historyIndex))).toFixed(2);
+    HeaderStyle.setProperty('--progress', progress);
 }
 backBT = document.querySelector("#backBt");
 backBT.onclick = (e) => {
     gui.navigateHistory(-1);
+    let progress = (1 / ((history.instances.length-1) / (gui.historyIndex))).toFixed(2);
+    HeaderStyle.setProperty('--progress', progress);
 }
