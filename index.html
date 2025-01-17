@@ -5,14 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MIC-1 Simulator</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
-    <button id="runBt">Run</button>
-    <button id="stepBt">Step</button>
-    <button id="backBt">Back</button>
-    <div id="registers"></div>
-    <div id="memory"></div>
-    <script src="history.js"></script>
-    <script src="simulator.js"></script>
+    <div class="controller">
+        <div class="container container-controller" data-progress=".5">
+            <button id="backBt" title="Back"><img height="20px" src="./assets/icons/back.svg" alt="back icon"></button>
+            <button id="runBt" title="Run"><img height="20px" src="./assets/icons/play.svg" alt="play icon"></button>
+            <button id="stepBt" title="Step"><img height="20px" src="./assets/icons/step.svg" alt="step icon"></button>
+        </div>
+    </div>
+    <main>
+        <div class="container container-main">
+            <div id="registers"></div>
+            <div id="memory"></div>
+            <script src="history.js"></script>
+            <script src="simulator.js"></script>
+        </div>
+    </main>
 </body>
 </html>
