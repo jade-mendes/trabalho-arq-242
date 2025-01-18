@@ -348,7 +348,7 @@ backBT.onclick = (e) => {
 }
 stepBT = document.querySelector("#stepBt");
 stepBT.onclick = (e) => {
-    gui.navegateHistory(1);
+    gui.navigateHistory(1);
 }
 backBT = document.querySelector("#backBt");
 backBT.onclick = (e) => {
