@@ -77,7 +77,7 @@ span em {
     color: var(--primary-accent-color);
 }
 
-#microarchitecture {
+#diagram {
     position: relative;
     width: 650px;
     height: 450px;
