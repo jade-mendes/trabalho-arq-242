@@ -76,4 +76,59 @@ button:focus-visible{
 span em {
     color: var(--primary-accent-color);
 }
+
+#diagram {
+  position: relative;
+  width: 650px;
+  height: 450px;
+  margin: 2%;
+  font-size: small;
+}
+
+.register,
+.component {
+  position: absolute;
+  width: 80px;
+  height: 30px;
+  border: 1px solid var(--primary-text-color);
+  text-align: center;
+  line-height: 30px;
+}
+
+#PC {
+  top: 50px;
+  left: 300px;
+}
+
+#AC {
+  top: 100px;
+  left: 300px;
+}
+
+#SP {
+  top: 150px;
+  left: 300px;
+}
+
+#MAR {
+  top: 400px;
+  left: 100px;
+}
+
+#MBR {
+  top: 450px;
+  left: 100px;
+}
+
+#shifter {
+  top: 450px;
+  left: 300px;
+}
+
+#buses {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
   
