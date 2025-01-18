@@ -79,8 +79,10 @@ span em {
 
 #microarchitecture {
     position: relative;
-    width: 800px;
-    height: 600px;
+    width: 650px;
+    height: 450px;
+    margin: 2%;
+    font-size: small;
   }
   
   .register,
@@ -95,26 +97,31 @@ span em {
   
   #PC {
     top: 50px;
-    left: 100px;
-  }
-  
-  #AC {
-    top: 150px;
-    left: 100px;
-  }
-  
-  #SP {
-    top: 250px;
-    left: 100px;
-  }
-  
-  #alu {
-    top: 150px;
     left: 300px;
   }
   
+  #AC {
+    top: 100px;
+    left: 300px;
+  }
+  
+  #SP {
+    top: 150px;
+    left: 300px;
+  }
+
+  #MAR {
+    top: 400px;
+    left: 100px;
+  }
+
+  #MBR {
+    top: 450px;
+    left: 100px;
+  }
+  
   #shifter {
-    top: 250px;
+    top: 450px;
     left: 300px;
   }
   
