@@ -79,56 +79,54 @@ span em {
 
 #diagram {
   position: relative;
-  width: 650px;
-  height: 450px;
+  width: 600px;
+  height: 400px;
   margin: 2%;
-  font-size: small;
+  font-size: 18px;
+  --abus-color: #ff80bf;
+  --bbus-color:#ffff80;
+  --cbus-color: #8aff80;
+
 }
 
-.register,
-.component {
+.register {
   position: absolute;
-  width: 80px;
-  height: 30px;
+  width: 70px;
+  height: 20px;
   border: 1px solid var(--primary-text-color);
   text-align: center;
-  line-height: 30px;
+  line-height: 20px;
+  vertical-align: baseline;
 }
 
-#PC {
+#the-registers{
+  position: relative;
   top: 50px;
-  left: 300px;
-}
-
-#AC {
-  top: 100px;
-  left: 300px;
-}
-
-#SP {
-  top: 150px;
-  left: 300px;
+  left: 270px;
 }
 
 #MAR {
-  top: 400px;
+  top: 370px;
   left: 100px;
 }
 
 #MBR {
-  top: 450px;
+  top: 400px;
   left: 100px;
 }
 
 #shifter {
   top: 450px;
-  left: 300px;
+  left: 360px;
 }
 
-#buses {
+#bus {
   position: absolute;
   top: 0;
   left: 0;
   z-index: -1;
+  fill: none;
+  stroke: var(--primary-text-color);
+  stroke-width: 2;
 }
   
