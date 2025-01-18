@@ -79,14 +79,10 @@ span em {
 
 #diagram {
   position: relative;
-  width: 600px;
-  height: 400px;
+  width: 500px;
+  height: 700px;
   margin: 2%;
   font-size: 18px;
-  --abus-color: #ff80bf;
-  --bbus-color:#ffff80;
-  --cbus-color: #8aff80;
-
 }
 
 .register {
@@ -97,27 +93,6 @@ span em {
   text-align: center;
   line-height: 20px;
   vertical-align: baseline;
-}
-
-#the-registers{
-  position: relative;
-  top: 50px;
-  left: 270px;
-}
-
-#MAR {
-  top: 370px;
-  left: 100px;
-}
-
-#MBR {
-  top: 400px;
-  left: 100px;
-}
-
-#shifter {
-  top: 450px;
-  left: 360px;
 }
 
 #bus {

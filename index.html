@@ -18,37 +18,36 @@
     <main>
         <div class="container container-main">
             <div id="memory"></div>
-            <div id="diagram">
-                <div class="register" id="the-registers">PC</div>
-                <div class="register" id="the-registers">AC</div>
-                <div class="register" id="the-registers">SP</div>
-                <div class="register" id="the-registers">IR</div>
-                <div class="register" id="the-registers">TIR</div>
-                <div class="register" id="the-registers">0</div>
-                <div class="register" id="the-registers">+1</div>
-                <div class="register" id="the-registers">-1</div>
-                <div class="register" id="the-registers">Amask</div>
-                <div class="register" id="the-registers">Smask</div>
-                <div class="register" id="the-registers">A</div>
-                <div class="register" id="the-registers">B</div>
-                <div class="register" id="the-registers">C</div>
-                <div class="register" id="the-registers">D</div>
-                <div class="register" id="the-registers">E</div>
-                <div class="register" id="the-registers">F</div>
-                <div class="register" id="MAR">MAR</div>
-                <div class="register" id="MBR">MBR</div>
-                <div class="register" id="shifter">Shifter</div>
-              
-                <svg width="800" height="600">
-                    <polygon id="alu" points="350,350 450,350 420,400 380,400" fill="#9700F5"/>
+            <div id="diagram">              
+                <svg width="500" height="700">
+                    <g>
+                        <text x="300" y="30" fill="white" font-size="20">PC</text>
+                        <text x="300" y="60" fill="white" font-size="20">AC</text>
+                        <text x="300" y="90" fill="white" font-size="20">SP</text>
+                        <text x="300" y="120" fill="white" font-size="20">IR</text>
+                        <text x="300" y="150" fill="white" font-size="20">TIR</text>
+                        <text x="300" y="180" fill="white" font-size="20">0</text>
+                        <text x="300" y="210" fill="white" font-size="20">+1</text>
+                        <text x="300" y="240" fill="white" font-size="20">-1</text>
+                        <text x="300" y="270" fill="white" font-size="20">Amask</text>
+                        <text x="300" y="300" fill="white" font-size="20">Smask</text>
+                        <text x="300" y="330" fill="white" font-size="20">A</text>
+                        <text x="300" y="360" fill="white" font-size="20">B</text>
+                        <text x="300" y="390" fill="white" font-size="20">C</text>
+                        <text x="300" y="420" fill="white" font-size="20">D</text>
+                        <text x="300" y="450" fill="white" font-size="20">E</text>
+                        <text x="300" y="480" fill="white" font-size="20">F</text>
+                    </g>
+                    <polygon id="alu" points="250,600 350,600 330,650 270,650" fill="#9700F5"/>
                     <g id="c-bus">
-                        <path id= "bus" d="m 225 60 l 0 405 l 170 0 l 0 -70"></path>
-                        <path id= "bus" d="m 225 60 l 75 0"></path>
-                        <path id= "bus" d="m 225 90 l 75 0"></path>
-                        <path id= "bus" d="m 225 120 l 75 0"></path>
-                        <path id= "bus" d="m 225 150 l 75 0"></path>
-                        <path id= "bus" d="m 225 180 l 75 0"></path>
-                        <path id= "bus" d="m 225 465 l -90 0 l 0 -55"></path>
+                        <path id= "bus" d="m 225 20 l 0 500 l 170 0 l 0 -70"></path>
+                        <path id= "bus" d="m 225 20 l 50 0"></path>
+                        <path id= "bus" d="m 225 60 l 50 0"></path>
+                        <path id= "bus" d="m 225 90 l 50 0"></path>
+                        <path id= "bus" d="m 225 120 l 50 0"></path>
+                        <path id= "bus" d="m 225 150 l 50 0"></path>
+                        <path id= "bus" d="m 225 180 l 50 0"></path>
+                        <path id= "bus" d="m 225 500 l -90 0 l 0 -55"></path>
                     </g>
 
                   
