@@ -83,8 +83,17 @@ span em {
   height: 700px;
   margin: 2%;
   font-size: 18px;
+  overflow: hidden;
+  z-index: -1;
 }
 
+#diagram svg {
+    position: absolute;
+    width: 80%; 
+    height: 80%; 
+    object-fit: contain;  
+  }
+  
 .register {
   position: absolute;
   width: 70px;
