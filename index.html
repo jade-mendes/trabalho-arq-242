@@ -20,35 +20,42 @@
             <div id="memory"></div>
             <div id="diagram">              
                 <svg width="500" height="700">
-                    <g>
-                        <text x="300" y="30" fill="white" font-size="20">PC</text>
-                        <text x="300" y="60" fill="white" font-size="20">AC</text>
-                        <text x="300" y="90" fill="white" font-size="20">SP</text>
-                        <text x="300" y="120" fill="white" font-size="20">IR</text>
-                        <text x="300" y="150" fill="white" font-size="20">TIR</text>
-                        <text x="300" y="180" fill="white" font-size="20">0</text>
-                        <text x="300" y="210" fill="white" font-size="20">+1</text>
-                        <text x="300" y="240" fill="white" font-size="20">-1</text>
-                        <text x="300" y="270" fill="white" font-size="20">Amask</text>
-                        <text x="300" y="300" fill="white" font-size="20">Smask</text>
-                        <text x="300" y="330" fill="white" font-size="20">A</text>
-                        <text x="300" y="360" fill="white" font-size="20">B</text>
-                        <text x="300" y="390" fill="white" font-size="20">C</text>
-                        <text x="300" y="420" fill="white" font-size="20">D</text>
-                        <text x="300" y="450" fill="white" font-size="20">E</text>
-                        <text x="300" y="480" fill="white" font-size="20">F</text>
+                    <g> <!-- caixinhas dos registradores -->
+                        <rect x="130.75" y="0.75" width="43.5" height="19.5" stroke="white" stroke-width="1.5"/>
+                        <rect x="130.75" y="52.75" width="43.5" height="19.5" stroke="white" stroke-width="1.5"/>
+                        <rect x="130.75" y="26.75" width="43.5" height="19.5" stroke="white" stroke-width="1.5"/>
+                        <rect x="130.75" y="78.75" width="43.5" height="19.5" stroke="white" stroke-width="1.5"/>
+                        <rect x="130.75" y="104.75" width="43.5" height="19.5" stroke="white" stroke-width="1.5"/>
+                        <rect x="130.75" y="130.75" width="43.5" height="19.5" stroke="white" stroke-width="1.5"/>
+                        <rect x="130.75" y="156.75" width="43.5" height="19.5" stroke="white" stroke-width="1.5"/>
+                        <rect x="130.75" y="182.75" width="43.5" height="19.5" stroke="white" stroke-width="1.5"/>
+                        <rect x="130.75" y="208.75" width="43.5" height="19.5" stroke="white" stroke-width="1.5"/>
+                        <rect x="130.75" y="234.75" width="43.5" height="19.5" stroke="white" stroke-width="1.5"/>
+                        <rect x="130.75" y="260.75" width="43.5" height="19.5" stroke="white" stroke-width="1.5"/>
+                        <rect x="130.75" y="286.75" width="43.5" height="19.5" stroke="white" stroke-width="1.5"/>
+                        <rect x="130.75" y="312.75" width="43.5" height="19.5" stroke="white" stroke-width="1.5"/>
+                        <rect x="130.75" y="338.75" width="43.5" height="19.5" stroke="white" stroke-width="1.5"/>
+                        <rect x="130.75" y="364.75" width="43.5" height="19.5" stroke="white" stroke-width="1.5"/>
+                        <rect x="130.75" y="390.75" width="43.5" height="19.5" stroke="white" stroke-width="1.5"/>
+                        <rect x="0.75" y="450.75" width="43.5" height="19.5" stroke="white" stroke-width="1.5"/>
+                        <rect x="0.75" y="479.75" width="43.5" height="19.5" stroke="white" stroke-width="1.5"/>
+                        <rect x="213.75" y="566.75" width="43.5" height="19.5" stroke="white" stroke-width="1.5"/>
+                        <rect x="174.75" y="482.75" width="43.5" height="19.5" stroke="white" stroke-width="1.5"/>
+                        <rect x="236.75" y="436.75" width="43.5" height="19.5" stroke="white" stroke-width="1.5"/>
+                        <rect x="175.75" y="436.75" width="43.5" height="19.5" stroke="white" stroke-width="1.5"/>     
                     </g>
-                    <polygon id="alu" points="250,600 350,600 330,650 270,650" fill="#9700F5"/>
-                    <g id="c-bus">
-                        <path id= "bus" d="m 225 20 l 0 500 l 170 0 l 0 -70"></path>
-                        <path id= "bus" d="m 225 20 l 50 0"></path>
-                        <path id= "bus" d="m 225 60 l 50 0"></path>
-                        <path id= "bus" d="m 225 90 l 50 0"></path>
-                        <path id= "bus" d="m 225 120 l 50 0"></path>
-                        <path id= "bus" d="m 225 150 l 50 0"></path>
-                        <path id= "bus" d="m 225 180 l 50 0"></path>
-                        <path id= "bus" d="m 225 500 l -90 0 l 0 -55"></path>
-                    </g>
+                <g>  <!-- barramentos -->
+                    <!-- barramento A -->
+                    <path d="M0 1H32V26.5M32 431V396M35.5 451.5V478M29 498V517M0 26.5H32M32 26.5V55.5M32 55.5H0M32 55.5V78.5M0 78.5H32M32 78.5V106.5M0 106.5H32M32 106.5V132.5M0 132.5H32M32 132.5V160M0 160H32M32 160V185.5M0 185.5H32M32 185.5V212M0 212H32M32 212V238M0 238H32M32 238V263.5M0 263.5H32M32 263.5V290M0 290H32M32 290V318.5M0 318.5H32M32 318.5V343.5M0 343.5H32M32 343.5V371M0 371H32M32 371V396M0 396H32" stroke="#FF80BF" stroke-width="2"/>
+                    <!-- barramento B -->
+                    <path d="M190.5 1.5H268.5V28M268.5 426V397M271.5 446V452.5M271.5 512V452.5M271.5 452.5H60M15 452.5H1V275.5M190.5 28H268.5M268.5 28V55.5M190.5 55.5H268.5M268.5 55.5V79M190.5 79H268.5M268.5 79V107M190.5 107H268.5M268.5 107V132M190.5 132H268.5M268.5 132V159.5M190.5 159.5H268.5M268.5 159.5V187M190.5 187H268.5M268.5 187V212M190.5 212H268.5M268.5 212V240M190.5 240H268.5M268.5 240V266.5M190.5 266.5H268.5M268.5 266.5V291M190.5 291H268.5M268.5 291V319M190.5 319H268.5M268.5 319V397M190.5 344H267M190.5 371.5H267M190.5 397H268.5" stroke="#9580FF" stroke-width="2"/>
+                    <!-- barramento C -->
+                    <path d="M169.5 1.5H125.5V29M125.5 586.5H270.5V578.5M125.5 586.5V398.5M125.5 586.5H60.5V492.5M270.5 548V558.5M39.5 482.5H1V279M125.5 29H169.5M125.5 29V55M125.5 55H169.5M125.5 55V80.5M125.5 80.5H169.5M125.5 80.5V109.5M125.5 109.5H169.5M125.5 109.5V136M125.5 136H169.5M125.5 136V161M125.5 161H169.5M125.5 161V186M125.5 186H169.5M125.5 186V213.5M125.5 213.5H169.5M125.5 213.5V241M125.5 241H169.5M125.5 241V265.5M125.5 265.5H169.5M125.5 265.5V292.5M125.5 292.5H169.5M125.5 292.5V321.5M125.5 321.5H169.5M125.5 321.5V345M125.5 345H169.5M125.5 345V372.5M125.5 372.5H169.5M125.5 372.5V398.5M125.5 398.5H169.5" stroke="#8AFF80" stroke-width="2"/>
+                    <!-- amux -> mbr -> memória principal -->
+                    <path d="M208 207.5H78M34.5 199H1.5V0.5" stroke="#FFFF80" stroke-width="2"/>
+                        
+                        
+                </g>
 
                   
                 </svg>
