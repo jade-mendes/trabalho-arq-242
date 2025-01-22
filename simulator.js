@@ -93,6 +93,8 @@ class Mic1{
             case 'AC <- MBR':  
                 this.registers.AC = this.registers.MBR;
                 break;
+            case 'PC <- (AC > 0) ? MAR : PC':
+                this.registers.AC > 0 ? this.registers.PC = this.registers.MAR : this.registers.PC;
             default:
                 console.log("Microinstrução não suportada: ", microOp);
                 break;
@@ -132,7 +134,7 @@ class Mic1{
                 this.registers.IR = "0100" + addressBit;
                 this.registers.MAR = address; // Carrega o endereço no MAR
                 this.execMicroInst('MBR <- M[MAR]');  // Lê o valor de memória
-                this.execMicroInst('PC <- (AC > 0) ? MBR : PC');  // Se AC > 0, pula para o valor de MBR
+                this.execMicroInst('PC <- (AC > 0) ? MAR : PC');  // Se AC > 0, pula para o valor de MBR
                 break;
             case 'JZER': // Jump Zero
                 this.registers.IR = "0101" + addressBit;
