@@ -102,6 +102,9 @@ class Mic1{
             case 'AC <- AC - MBR':
                 this.registers.AC -= this.registers.MBR;
                 break;
+            case 'AC <- AC + MBR':
+                this.registers.AC += this.registers.MBR;
+                break;
             case 'SP <- SP - 1':
                 this.registers.SP -= 1;
                 break;
@@ -126,6 +129,8 @@ class Mic1{
             case 'M[SP] <- MBR':
                 this.memory[this.registers.SP] = this.registers.MBR;
                 break;
+            case 'M[SP] <- AC':
+                this.memory[this.registers.SP] = this.registers.AC;
             default:
                 console.log("Microinstrução não suportada: ", microOp);
                 break;
@@ -186,24 +191,29 @@ class Mic1{
                 break;
             case 'LODL': // Load Local
                 this.registers.IR = "1000" + addressBit;
-                this.registers.MAR = address;     // Carrega o endereço no MAR
+                this.registers.MAR = address;     
                 this.execMicroInst('SP <- SP + MAR');
                 this.execMicroInst('AC <- M[SP]');
                 break;
             case 'STOL': // Store Local
                 this.registers.IR = "1001" + addressBit;
-                this.registers.MAR = address;     // Carrega o endereço no MAR
-                
+                this.registers.MAR = address;    
+                this.execMicroInst('SP <- SP + MAR');
+                this.execMicroInst('M[SP] <- AC');
                 break;
             case 'ADDL': // Add Local
                 this.registers.IR = "1010" + addressBit;
-                this.registers.MAR = address;     // Carrega o endereço no MAR
-                
+                this.registers.MAR = address;     
+                this.execMicroInst('SP <- SP + MAR');
+                this.execMicroInst('MBR <- M[SP]');
+                this.execMicroInst('AC <- AC + MBR');
                 break;
             case 'SUBL': // Subtract Local
                 this.registers.IR = "1011" + addressBit;
-                this.registers.MAR = address;     // Carrega o endereço no MAR
-                
+                this.registers.MAR = address;     
+                this.execMicroInst('SP <- SP + MAR');
+                this.execMicroInst('MBR <- M[SP]');
+                this.execMicroInst('AC <- AC - MBR');
                 break;
             case 'JNEG': // Jump Negative
                 this.registers.IR = "1100" + addressBit;
