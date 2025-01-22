@@ -111,6 +111,12 @@ class Mic1{
             case 'MAR <- SP':
                 this.registers.MAR = this.registers.SP;
                 break;
+            case 'SP <- SP + 1':
+                this.registers.SP += 1;
+                break;
+            case 'MBR <- M[SP]':
+                this.registers.MBR = this.memory[this.registers.SP];
+                break;
             default:
                 console.log("Microinstrução não suportada: ", microOp);
                 break;
