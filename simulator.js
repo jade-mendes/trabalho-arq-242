@@ -108,6 +108,12 @@ class Mic1{
             case 'AC <- AC - MBR':
                 this.registers.AC -= this.registers.MBR;
                 break;
+            case 'SP <- SP - 1':
+                this.registers.SP -= 1;
+                break;
+            case 'M[SP] <- PC':
+                this.memory[this.registers.SP] = this.registers.PC;
+                break;
             default:
                 console.log("Microinstrução não suportada: ", microOp);
                 break;
@@ -208,7 +214,7 @@ class Mic1{
                 this.execMicroInst('MBR <- M[MAR]');  // Lê o valor da memória
                 this.execMicroInst('SP <- SP - 1'); // Decrementa o Stack Pointer (SP)
                 this.execMicroInst('M[SP] <- PC');  // Armazena o endereço de retorno no stack
-                this.execMicroInst('PC <- MBR');  // Pula para a sub-rotina
+                this.execMicroInst('PC <- MAR');  // Pula para a sub-rotina
                 break;   
             case 'PSHI': // Push Indirect
                 this.registers.IR = "1111".padEnd(16, '0');
