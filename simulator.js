@@ -7,7 +7,7 @@ class Mic1{
             AC: 0,  // Accumulator
             SP: (255).toString(2).padStart(16, '0'),  // Stack Pointer
             IR: 0,  // Memory Instruction Register
-            TIR: 0, // Temporary Instruction Register
+            // TIR: 0, // Temporary Instruction Register
             "Zero": 0, // Zero
             "+1": 1, // Plus One
             "-1": -1, // Minus One
@@ -340,10 +340,10 @@ class SimulatorGUI {
 
     updateCurrent(){
         const currentInst = document.getElementById("currentInst");
-        if(this.historyIndex==0){
-            currentInst.innerText = " ";
-        } else
-        currentInst.innerText = this.program[this.historyIndex-1][0] + " " + this.program[this.historyIndex-1][1];
+        // if(this.historyIndex==0){
+        //     currentInst.innerText = " ";
+        // } else
+        // currentInst.innerText = this.program[this.simulator.registers.PC - 1][0] + " " + this.program[this.simulator.registers.PC - 1][1];
     }
 
     loadHistory(index = 0){
@@ -391,12 +391,14 @@ class SimulatorGUI {
         this.program = program;
         history.clear();
         let count = 0;
-
+        console.log(program);
+        
         for (let i = 0; i < program.length; i++) {
             history.addInstance(this.simulator.registers, this.simulator.memory);
             let res = this.simulator.execMacroInst(program[i][0], program[i][1]);
+            console.log(res);
             
-            if(res){count++; i = res}
+            if(res){count++; i = res - 1}
         }
         history.addInstance(this.simulator.registers, this.simulator.memory);
         this.loadHistory(0);
@@ -452,13 +454,13 @@ runBT.onclick = () => {
 stepBT = document.getElementById("stepBt");
 stepBT.onclick = (e) => {
     gui.navigateHistory(1);
-    let progress = (1 / ((program.length-1) / (gui.historyIndex))).toFixed(2);
+    let progress = (1 / ((history.instances.length-1) / (gui.historyIndex))).toFixed(2);
     HeaderStyle.setProperty('--progress', progress);
 }
 backBT = document.getElementById("backBt");
 backBT.onclick = (e) => {
     gui.navigateHistory(-1);
-    let progress = (1 / ((program.length-1) / (gui.historyIndex))).toFixed(2);
+    let progress = (1 / ((history.instances.length-1) / (gui.historyIndex))).toFixed(2);
     HeaderStyle.setProperty('--progress', progress);
 }
 editBt = document.getElementById("editBt");
