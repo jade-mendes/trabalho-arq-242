@@ -6,22 +6,35 @@
     <title>MIC-1 Simulator</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <script defer src="history.js"></script>
+    <script defer src="simulator.js"></script>
 </head>
 <body>
-    <div class="controller">
-        <div class="container container-controller" data-progress=".5">
-            <button id="backBt" title="Back"><img height="20px" src="./assets/icons/back.svg" alt="back icon"></button>
-            <button id="runBt" title="Run"><img height="20px" src="./assets/icons/play.svg" alt="play icon"></button>
-            <button id="stepBt" title="Step"><img height="20px" src="./assets/icons/step.svg" alt="step icon"></button>
-        </div>
-    </div>
     <main>
         <div class="container container-main">
             <div id="registers"></div>
             <div id="memory"></div>
-            <script src="history.js"></script>
-            <script src="simulator.js"></script>
         </div>
     </main>
+    <footer class="controller">
+        <div class="container container-controller" data-progress=".5">
+            <button id="editBt" title="Edit"><img height="20px" src="./assets/icons/edit.svg" alt="edit icon"></button>
+            <button id="backBt" title="Back"><img height="20px" src="./assets/icons/back.svg" alt="back icon"></button>
+            <button id="runBt" title="Run"><img height="20px" src="./assets/icons/play.svg" alt="play icon"></button>
+            <button id="stepBt" title="Step"><img height="20px" src="./assets/icons/step.svg" alt="step icon"></button>
+        </div>
+    </footer>
+    <dialog id="editDialog" class="dialog-edit">
+        <form method="dialog" class="container">
+            <section>
+                <label for="favAnimal">Programa:</label>
+                <textarea name="programa" id="txtProgram"></textarea>
+            </section>
+            <menu>
+                <button id="modalCancel" type="reset" class="bt-alt">Cancel</button>
+                <button id="modalSubmit" type="submit">Confirm</button>
+            </menu>
+        </form>
+    </dialog>
 </body>
 </html>
