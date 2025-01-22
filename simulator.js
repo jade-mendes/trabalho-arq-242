@@ -117,6 +117,12 @@ class Mic1{
             case 'MBR <- M[SP]':
                 this.registers.MBR = this.memory[this.registers.SP];
                 break;
+            case 'AC <- M[SP]':
+                this.registers.AC = this.memory[this.registers.SP];
+                break;
+            case 'M[SP] <- MBR':
+                this.memory[this.registers.SP] = this.registers.MBR;
+                break;
             default:
                 console.log("Microinstrução não suportada: ", microOp);
                 break;
@@ -245,7 +251,7 @@ class Mic1{
             case 'RETN': // Return from Subroutine
                 this.registers.IR = "11111".padEnd(16, '0');
                 this.execMicroInst('MBR <- M[SP]');   // Lê o valor de retorno da pilha para MBR
-                this.execMicroInst('PC <- MBR');      // Transfere o valor de MBR para o PC
+                this.execMicroInst('PC <- MAR');      // Transfere o endereço no MAR para o PC
                 this.execMicroInst('SP <- SP + 1');   // Incrementa o Stack Pointer
                 break;
             case 'SWAP': // Swap
