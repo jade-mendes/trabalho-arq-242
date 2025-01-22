@@ -452,13 +452,13 @@ runBT.onclick = () => {
 stepBT = document.getElementById("stepBt");
 stepBT.onclick = (e) => {
     gui.navigateHistory(1);
-    let progress = (1 / ((history.instances.length-1) / (gui.historyIndex))).toFixed(2);
+    let progress = (1 / ((program.length-1) / (gui.historyIndex))).toFixed(2);
     HeaderStyle.setProperty('--progress', progress);
 }
 backBT = document.getElementById("backBt");
 backBT.onclick = (e) => {
     gui.navigateHistory(-1);
-    let progress = (1 / ((history.instances.length-1) / (gui.historyIndex))).toFixed(2);
+    let progress = (1 / ((program.length-1) / (gui.historyIndex))).toFixed(2);
     HeaderStyle.setProperty('--progress', progress);
 }
 editBt = document.getElementById("editBt");
