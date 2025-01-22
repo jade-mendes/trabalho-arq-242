@@ -301,6 +301,7 @@ class SimulatorGUI {
     constructor(simulator, history) {
         this.simulator = simulator;
         this.history = history;
+        this.program = []
         this.historyIndex = 0;
         this.createWidgets();
     }
@@ -335,6 +336,14 @@ class SimulatorGUI {
             span.innerHTML = `<em>${i}:</em> ${this.toBinary(this.simulator.memory[i], 16)} ( ${this.simulator.memory[i]} )`;
             memoryDiv.appendChild(span);
         }
+    }
+
+    updateCurrent(){
+        const currentInst = document.getElementById("currentInst");
+        if(this.historyIndex==0){
+            currentInst.innerText = " ";
+        } else
+        currentInst.innerText = this.program[this.historyIndex-1][0] + " " + this.program[this.historyIndex-1][1];
     }
 
     loadHistory(index = 0){
@@ -373,11 +382,13 @@ class SimulatorGUI {
             this.historyIndex += offset;
             this.updateMemory();
             this.updateRegisters();
+            this.updateCurrent();
         }
     }
 
     runProgram(program){
         this.simulator.reset();
+        this.program = program;
         history.clear();
         let count = 0;
 

@@ -39,7 +39,7 @@ main{
 .controller::after{
     content: "";
     position: absolute;
-    bottom: 0;
+    top: 0;
     /* width: 100%; */
     left: 0; right: 0;
     height: 5px;
@@ -77,6 +77,11 @@ button{
 button:hover,
 button:focus-visible{
     filter: brightness(.9);
+}
+
+#currentInst{
+    display: block;
+    text-align: center;
 }
 
 #registers, #memory {
