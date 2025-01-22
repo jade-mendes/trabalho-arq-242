@@ -105,14 +105,17 @@ class Mic1{
             case 'SP <- SP - 1':
                 this.registers.SP -= 1;
                 break;
+            case 'SP <- SP + 1':
+                this.registers.SP += 1;
+                break;
+            case 'SP <- SP + MAR':
+                this.registers.SP = this.registers.SP + this.registers.MAR;
+                break;
             case 'M[SP] <- PC':
                 this.memory[this.registers.SP] = this.registers.PC;
                 break;
             case 'MAR <- SP':
                 this.registers.MAR = this.registers.SP;
-                break;
-            case 'SP <- SP + 1':
-                this.registers.SP += 1;
                 break;
             case 'MBR <- M[SP]':
                 this.registers.MBR = this.memory[this.registers.SP];
@@ -184,26 +187,23 @@ class Mic1{
             case 'LODL': // Load Local
                 this.registers.IR = "1000" + addressBit;
                 this.registers.MAR = address;     // Carrega o endereço no MAR
-                this.execMicroInst('MBR <- M[MAR]');  // Lê o valor de memória para MBR
-                this.execMicroInst('AC <- MBR');      // Carrega o valor no acumulador
+                this.execMicroInst('SP <- SP + MAR');
+                this.execMicroInst('AC <- M[SP]');
                 break;
             case 'STOL': // Store Local
                 this.registers.IR = "1001" + addressBit;
                 this.registers.MAR = address;     // Carrega o endereço no MAR
-                this.execMicroInst('MBR <- AC');      // Transfere o valor do AC para o MBR
-                this.execMicroInst('M[MAR] <- MBR');  // Armazena o valor no endereço
+                
                 break;
             case 'ADDL': // Add Local
                 this.registers.IR = "1010" + addressBit;
                 this.registers.MAR = address;     // Carrega o endereço no MAR
-                this.execMicroInst('MBR <- M[MAR]');  // Lê o valor de memória para MBR
-                this.execMicroInst('AC <- AC + MBR'); // Soma o valor de AC com o valor de MBR
+                
                 break;
             case 'SUBL': // Subtract Local
                 this.registers.IR = "1011" + addressBit;
                 this.registers.MAR = address;     // Carrega o endereço no MAR
-                this.execMicroInst('MBR <- M[MAR]');  // Lê o valor de memória para MBR
-                this.execMicroInst('AC <- AC - MBR'); // Subtrai o valor de MBR de AC
+                
                 break;
             case 'JNEG': // Jump Negative
                 this.registers.IR = "1100" + addressBit;
