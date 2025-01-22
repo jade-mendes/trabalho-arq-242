@@ -104,6 +104,10 @@ class Mic1{
                 break;
             case 'PC <- (AC !== 0) ? MAR : PC':
                 this.registers.AC !== 0 ? this.registers.PC = this.registers.MAR : this.registers.PC;
+                break;
+            case 'AC <- AC - MBR':
+                this.registers.AC -= this.registers.MBR;
+                break;
             default:
                 console.log("Microinstrução não suportada: ", microOp);
                 break;
