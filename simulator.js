@@ -5,14 +5,14 @@ class Mic1{
         this.initialRegisters = {
             PC: 0,  // Program Counter
             AC: 0,  // Accumulator
-            SP: 0,  // Stack Pointer
+            SP: (255).toString(2).padStart(16, '0'),  // Stack Pointer
             IR: 0,  // Memory Instruction Register
             TIR: 0, // Temporary Instruction Register
-            "0": 0, // Zero
-            "+1": 0, // Plus One
-            "-1": 0, // Minus One
-            AMASK: 0, // Adress Mask
-            SMASK: 0, // Stack Mask
+            "Zero": 0, // Zero
+            "+1": 1, // Plus One
+            "-1": -1, // Minus One
+            AMASK: '0000111111111111', // Adress Mask
+            SMASK: '0000000011111111', // Stack Mask
             A: 0,    // A Register
             B: 0,    // B Register
             C: 0,    // C Register
@@ -24,8 +24,8 @@ class Mic1{
             AMUX: 0,
             ALU: [0,0], 
             Shifter: 0,
-            ALatch: 0,
-            BLatch: 0,
+            // ALatch: 0,
+            // BLatch: 0,
             N: 0, // Minus One
             Z: 0, // Minus One
         };
@@ -44,12 +44,15 @@ class Mic1{
 
     ALU(op) {
         switch (op) {
-            case 'ADD': return this.registers.ALU[0] + this.registers.ALU[1];
-            case 'SUB': return this.registers.ALU[0] - this.registers.ALU[1];
-            case 'AND': return this.registers.ALU[0] & this.registers.ALU[1];
-            case 'OR': return this.registers.ALU[0] | this.registers.ALU[1];
+            case 'ADD': this.registers.Shifter = this.registers.ALU[0] + this.registers.ALU[1]; break;
+            case 'SUB': this.registers.Shifter = this.registers.ALU[0] - this.registers.ALU[1]; break;
+            case 'AND': this.registers.Shifter = this.registers.ALU[0] & this.registers.ALU[1]; break;
+            case 'OR': this.registers.Shifter = this.registers.ALU[0] | this.registers.ALU[1]; break;
             default: return 0;
         }
+        this.registers.N = this.registers.Shifter < 0 ? 1 : 0;
+        this.registers.Z = this.registers.Shifter === 0 ? 1 : 0;
+        return this.registers.Shifter;
     }
 
     // Unidade de Controle - Função para executar uma microinstrução
@@ -72,7 +75,8 @@ class Mic1{
                 break;
             case 'AC <- A + MBR':
                 this.registers.ALU = [this.registers.A, this.registers.MBR]
-                this.registers.AC = this.ALU('ADD');
+                this.ALU('ADD');
+                this.registers.AC = this.registers.Shifter;
                 break;
             case 'MBR <- AC':
                 this.registers.MBR = this.registers.AC;
@@ -144,9 +148,8 @@ class Mic1{
                 break;
             case 'LOCO': // Load Constant
                 this.registers.IR = "0111" + addressBit;
-                this.registers.MAR = address; // Carrega o endereço no MAR
-                this.execMicroInst('MBR <- M[MAR]');  // Lê o valor de memória
-                this.execMicroInst('AC <- MBR');  // Carrega o valor constante no AC
+                this.registers.MR = address; 
+                this.registers.AC = address; 
                 break;
             case 'LODL': // Load Local
                 this.registers.IR = "1000" + addressBit;
@@ -244,6 +247,7 @@ class Mic1{
 }
 
 class SimulatorGUI {
+    
     constructor(simulator, history) {
         this.simulator = simulator;
         this.history = history;
@@ -254,6 +258,13 @@ class SimulatorGUI {
     createWidgets() {
         this.updateRegisters();
         this.updateMemory();
+    }
+
+    toBinary(value, bitLength) {
+        if (value < 0) {
+            value = (1 << bitLength) + value; 
+        }
+        return value.toString(2).padStart(bitLength, '0'); 
     }
 
     updateRegisters() {
@@ -271,7 +282,7 @@ class SimulatorGUI {
         memoryDiv.innerHTML = '';
         for (let i = 0; i < this.simulator.memory.length; i++) {
             const span = document.createElement('span');
-            span.innerHTML = `<em>${i}:</em> ${this.simulator.memory[i].toString(2).padStart(16, '0')} ( ${this.simulator.memory[i]} )`;
+            span.innerHTML = `<em>${i}:</em> ${this.toBinary(this.simulator.memory[i], 16)} ( ${this.simulator.memory[i]} )`;
             memoryDiv.appendChild(span);
         }
     }
@@ -297,60 +308,67 @@ class SimulatorGUI {
         }
     }
 
-    testSimulation() {
+    runProgram(program){
         this.simulator.reset();
-        this.simulator.memory[0] = 10;  // Endereço de teste para LOAD e ADD
-        this.simulator.memory[1] = 20;  // Outro endereço de teste para operações de 
-        let instructions = [
-            ['LODD', 0],
-            ['ADDD', 1],
-            ['STOD', 6],
-        ]
-
-        this.simulator.registers.PC = 0;  // Definir contador de programa para o endereço 0
-        
         history.clear();
 
-        instructions.forEach((inst)=> {
+        program.forEach((inst)=> {
             history.addInstance(this.simulator.registers, this.simulator.memory);
             this.simulator.execMacroInst(inst[0], inst[1]);
         })
         history.addInstance(this.simulator.registers, this.simulator.memory);
         this.loadHistory(0);
-
-        history.log();
     }
 }
 
 const mic2 = new Mic1();
 const history = new History();
 const gui = new SimulatorGUI(mic2, history);
+let program = [];
 HeaderStyle = document.querySelector(".controller").style;
 
-runBT = document.querySelector("#runBt");
+runBT = document.getElementById("runBt");
 runBT.onclick = () => {
-    gui.testSimulation();
+    gui.runProgram(program);
     gui.updateRegisters();
     gui.updateMemory();
     HeaderStyle.setProperty('--progress', 0);
 }
-stepBT = document.querySelector("#stepBt");
+stepBT = document.getElementById("stepBt");
 stepBT.onclick = (e) => {
     gui.navigateHistory(1);
     let progress = (1 / ((history.instances.length-1) / (gui.historyIndex))).toFixed(2);
     HeaderStyle.setProperty('--progress', progress);
 }
-backBT = document.querySelector("#backBt");
+backBT = document.getElementById("backBt");
 backBT.onclick = (e) => {
     gui.navigateHistory(-1);
     let progress = (1 / ((history.instances.length-1) / (gui.historyIndex))).toFixed(2);
     HeaderStyle.setProperty('--progress', progress);
 }
-stepBT = document.querySelector("#stepBt");
-stepBT.onclick = (e) => {
-    gui.navigateHistory(1);
+editBt = document.getElementById("editBt");
+editDialog = document.getElementById("editDialog");
+editBt.onclick = (e) => {
+    editDialog.showModal();
 }
-backBT = document.querySelector("#backBt");
-backBT.onclick = (e) => {
-    gui.navigateHistory(-1);
+// editDialog.showModal(); // REMOVER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+cancelBt = document.getElementById("modalCancel");
+cancelBt.onclick = (e) => {
+    editDialog.close();
+}
+submitBt = document.getElementById("modalSubmit");
+submitBt.onclick = (e) => {
+    const textarea = document.getElementById('txtProgram').value;
+    const lines = textarea.split('\n');
+    program = [];
+
+    lines.forEach((line, index) => {
+        program.push(line.trim().split(' '));
+        program[index][1] = parseInt(program[index][1]);
+        
+    });
+    console.log(program);
+
+    editDialog.close();
 }
