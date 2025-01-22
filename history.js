@@ -12,6 +12,7 @@ class History {
 
     // Método para obter uma instância específica
     getInstance(index) {
+        if (index < 0 || index >= this.instances.length) return 0;
         return this.instances[index];
     }
 

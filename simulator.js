@@ -56,7 +56,7 @@ class Mic1{
     }
 
     // Unidade de Controle - Função para executar uma microinstrução
-    execMicroInst(microOp) {
+    execMicroInst(microOp, address) {
         switch (microOp) {
             // case 'MAR <- PC':
             //     this.registers.MAR = this.registers.PC;
@@ -73,8 +73,9 @@ class Mic1{
             case 'A <- AC':
                 this.registers.A = this.registers.AC;
                 break;
-            case 'AC <- A + MBR':
-                this.registers.ALU = [this.registers.A, this.registers.MBR]
+            case 'AC <- AC + MBR':
+                this.registers.ALU = [this.registers.MBR, this.registers.AC]
+                this.registers.AMUX = 1;
                 this.ALU('ADD');
                 this.registers.AC = this.registers.Shifter;
                 break;
@@ -84,23 +85,30 @@ class Mic1{
             case 'M[MAR] <- MBR':
                 this.memory[this.registers.MAR] = this.registers.MBR;
                 break;
-            case 'PC <- MAR':  
-                this.registers.PC = this.registers.MAR;
+            case 'PC <- X':  
+                this.registers.PC = address;
+                return address;
                 break;
-            case 'PC <- (AC > 0) ? MAR : PC':
-                this.registers.AC > 0 ? this.registers.PC = this.registers.MAR : this.registers.PC;
+            case 'PC <- (AC > 0) ? X : PC':
+                this.registers.AC > 0 ? this.registers.PC = address : this.registers.PC;
+                return this.registers.AC > 0 ? address : null;
                 break;
-            case 'PC <- (AC === 0) ? MAR : PC':
-                this.registers.AC === 0 ? this.registers.PC = this.registers.MAR : this.registers.PC;
+            case 'PC <- (AC === 0) ? X : PC':
+                this.registers.AC === 0 ? this.registers.PC = address : this.registers.PC;
+                return this.registers.AC === 0 ? address : null;
                 break;
-            case 'PC <- (AC < 0) ? MAR : PC':
-                this.registers.AC < 0 ? this.registers.PC = this.registers.MAR : this.registers.PC;
+            case 'PC <- (AC < 0) ? X : PC':
+                this.registers.AC < 0 ? this.registers.PC = address : this.registers.PC;
+                return this.registers.AC < 0 ? address : null;
                 break;
-            case 'PC <- (AC !== 0) ? MAR : PC':
-                this.registers.AC !== 0 ? this.registers.PC = this.registers.MAR : this.registers.PC;
+            case 'PC <- (AC !== 0) ? X : PC':
+                this.registers.AC !== 0 ? this.registers.PC = address : this.registers.PC;
+                return this.registers.AC !== 0 ? address : null;
                 break;
             case 'AC <- AC - MBR':
-                this.registers.AC -= this.registers.MBR;
+                this.registers.ALU = [this.registers.MBR, this.registers.AC]
+                this.ALU('SUB');
+                this.registers.AC = this.registers.Shifter;
                 break;
             case 'AC <- AC + MBR':
                 this.registers.AC += this.registers.MBR;
@@ -160,8 +168,7 @@ class Mic1{
                 this.registers.IR = "0010" + addressBit;
                 this.registers.MAR = address;     // Etapa 1: Carrega o endereço no MAR
                 this.execMicroInst('MBR <- M[MAR]');  // Etapa 2: Lê o valor da memória para MBR
-                this.execMicroInst('A <- AC');        // Etapa 3: Armazena o AC em A
-                this.execMicroInst('AC <- A + MBR');  // Etapa 4: Soma A e MBR e armazena em AC
+                this.execMicroInst('AC <- AC + MBR');  // Etapa 3: Soma A e MBR e armazena em AC
                 break;
             case 'SUBD':
                 this.registers.IR = "0011" + addressBit;
@@ -171,25 +178,22 @@ class Mic1{
                 break;
             case 'JPOS': // Jump 
                 this.registers.IR = "0100" + addressBit;
-                this.registers.MAR = address; // Carrega o endereço no MAR
-                this.execMicroInst('MBR <- M[MAR]');  // Lê o valor de memória
-                this.execMicroInst('PC <- (AC > 0) ? MAR : PC');  // Se AC > 0, pula para o endereço no MAR
+                let res = this.execMicroInst('PC <- (AC > 0) ? X : PC', address);  // Se AC > 0, pula para o endereço no MAR
+                return res;
                 break;
             case 'JZER': // Jump Zero
                 this.registers.IR = "0101" + addressBit;
-                this.registers.MAR = address; // Carrega o endereço no MAR
-                this.execMicroInst('MBR <- M[MAR]');  // Lê o valor de memória
-                this.execMicroInst('PC <- (AC === 0) ? MAR : PC');  // Se AC == 0, pula para o endereço no MAR
+                this.execMicroInst('PC <- (AC === 0) ? X : PC', address);  // Se AC == 0, pula para o endereço no MAR
+                return address;
                 break;
             case 'JUMP': // Jump
                 this.registers.IR = "0110" + addressBit;
-                this.registers.MAR = address; // Carrega o endereço no MAR
-                this.execMicroInst('MBR <- M[MAR]');  // Lê o valor de memória
-                this.execMicroInst('PC <- MAR');  // Pula para o endereço no MAR
+                this.execMicroInst('PC <- X', address);  // Pula para o endereço no MAR
+                return address;
                 break;
             case 'LOCO': // Load Constant
                 this.registers.IR = "0111" + addressBit;
-                this.registers.MR = address; 
+                this.registers.MBR = address; 
                 this.registers.AC = address; 
                 break;
             case 'LODL': // Load Local
@@ -220,15 +224,13 @@ class Mic1{
                 break;
             case 'JNEG': // Jump Negative
                 this.registers.IR = "1100" + addressBit;
-                this.registers.MAR = address;     // Carrega o endereço no MAR
-                this.execMicroInst('MBR <- M[MAR]');  // Lê o valor de memória para MBR
-                this.execMicroInst('PC <- (AC < 0) ? MAR : PC'); // Se AC < 0, pula para o endereço no MAR
+                this.execMicroInst('PC <- (AC < 0) ? X : PC', address); // Se AC < 0, pula para o endereço no MAR
+                return address;
                 break;
             case 'JNZE': // Jump Not Zero
                 this.registers.IR = "1101" + addressBit;
-                this.registers.MAR = address;     // Carrega o endereço no MAR
-                this.execMicroInst('MBR <- M[MAR]');  // Lê o valor de memória para MBR
-                this.execMicroInst('PC <- (AC !== 0) ? MAR : PC'); // Se AC != 0, pula para endereço no MAR
+                this.execMicroInst('PC <- (AC !== 0) ? X : PC', address); // Se AC != 0, pula para endereço no MAR
+                return address;
                 break;
             case 'CALL': // Call Subroutine
                 this.registers.IR = "1110" + addressBit;
@@ -275,18 +277,19 @@ class Mic1{
                 break;
             case 'INSP': // Increment Stack Pointer
                 this.registers.IR = "11111100" + address.toString(2).padStart(8, '0');
-                this.registers.MR = address;
+                this.registers.MBR = address;
                 this.registers.AC = address;
                 this.execMicroInst('SP <- SP + AC');
                 break;
             case 'DESP': // Decrement Stack Pointer
                 this.registers.IR = "11111110" + address.toString(2).padStart(8, '0');
-                this.registers.MR = address;
+                this.registers.MBR = address;
                 this.registers.AC = address;
                 this.execMicroInst('SP <- SP - AC');
                 break;
             default:
                 console.log("Instrução não suportada: ", instruction);
+                alert("Instrução não suportada: " + instruction);
                 break;
         }
         this.execMicroInst('PC <- PC + 1'); // Avança o contador de programa
@@ -342,31 +345,85 @@ class SimulatorGUI {
         this.simulator.registers = instance.registers;
     }
 
+    historyChanges(currentIndex, instance){
+        let previous = this.history.getInstance(currentIndex -1);
+        let components = [];
+        if (previous){
+            if(JSON.stringify(previous.memory) !== JSON.stringify(instance.memory)){
+                components.push("Memory");
+            }
+            const allKeys = new Set([...Object.keys(instance.registers)]);
+            allKeys.forEach(key => {
+                if (instance.registers[key] !== previous.registers[key]) {
+                    components.push(key); // Adicionar chave ao vetor se os valores forem diferentes
+                }
+            });
+        }
+        return components;
+    }
+
     navigateHistory(offset = 1){
-        try {
-            let instance = this.history.getInstance(this.historyIndex + offset);
+        let instance = this.history.getInstance(this.historyIndex + offset);
+        
+        if (instance) {
             this.simulator.memory = instance.memory;
             this.simulator.registers = instance.registers;
+            let components = this.historyChanges(this.historyIndex + offset, instance);
+            this.highLightComp(components);
             this.historyIndex += offset;
             this.updateMemory();
             this.updateRegisters();
-        } catch (error) {
-            console.log("Fora do intervalo do histórico!");
         }
     }
 
     runProgram(program){
         this.simulator.reset();
         history.clear();
+        let count = 0;
 
-        program.forEach((inst)=> {
+        for (let i = 0; i < program.length; i++) {
             history.addInstance(this.simulator.registers, this.simulator.memory);
-            this.simulator.execMacroInst(inst[0], inst[1]);
-        })
+            let res = this.simulator.execMacroInst(program[i][0], program[i][1]);
+            
+            if(res){count++; i = res}
+        }
         history.addInstance(this.simulator.registers, this.simulator.memory);
         this.loadHistory(0);
     }
+
+    highLightComp(components){
+        let allComp = ["PC", "AC", "SP", "IR", "TIR", "Zero", "plusOne", "minusOne", "Amask", "Smask", "A", "B", "C", "D", "E", "F", "Memory"]
+        allComp.forEach(component => {
+            let element = document.getElementById(component);
+            if (components.find((element) => element == component)) {
+                element?.classList.add("pulsing");
+            }else{
+                element?.classList.remove("pulsing");
+            }
+        });
+    }
 }
+
+var init = false;
+var swiper;
+function swiperCard() {
+  if (window.innerWidth <= 850) {
+    if (!init) {
+      init = true;
+      swiper = new Swiper(".swiper", {
+        direction: "horizontal",
+        centeredSlides: true,
+        loop: false,
+        initialSlide: 1,
+      });
+    }
+  } else if (init) {
+    swiper.destroy();
+    init = false;
+  }
+}
+swiperCard();
+window.addEventListener("resize", swiperCard);
 
 const mic2 = new Mic1();
 const history = new History();
@@ -398,7 +455,6 @@ editDialog = document.getElementById("editDialog");
 editBt.onclick = (e) => {
     editDialog.showModal();
 }
-// editDialog.showModal(); // REMOVER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 cancelBt = document.getElementById("modalCancel");
 cancelBt.onclick = (e) => {
