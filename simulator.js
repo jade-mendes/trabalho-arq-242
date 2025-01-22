@@ -105,14 +105,17 @@ class Mic1{
             case 'AC <- AC + MBR':
                 this.registers.AC += this.registers.MBR;
                 break;
-            case 'SP <- SP - 1':
-                this.registers.SP -= 1;
-                break;
             case 'SP <- SP + 1':
                 this.registers.SP += 1;
                 break;
             case 'SP <- SP + MAR':
                 this.registers.SP = this.registers.SP + this.registers.MAR;
+                break;
+            case 'SP <- SP + AC':
+                this.registers.SP = this.registers.SP + this.registers.AC;
+                break;
+            case 'SP <- SP - AC':
+                this.registers.SP = this.registers.SP - this.registers.AC;
                 break;
             case 'M[SP] <- PC':
                 this.memory[this.registers.SP] = this.registers.PC;
@@ -272,11 +275,15 @@ class Mic1{
                 break;
             case 'INSP': // Increment Stack Pointer
                 this.registers.IR = "11111100" + address.toString(2).padStart(8, '0');
-                this.execMicroInst('SP <- SP + 1');   // Incrementa o Stack Pointer
+                this.registers.MR = address;
+                this.registers.AC = address;
+                this.execMicroInst('SP <- SP + AC');
                 break;
             case 'DESP': // Decrement Stack Pointer
                 this.registers.IR = "11111110" + address.toString(2).padStart(8, '0');
-                this.execMicroInst('SP <- SP - 1');   // Decrementa o Stack Pointer
+                this.registers.MR = address;
+                this.registers.AC = address;
+                this.execMicroInst('SP <- SP - AC');
                 break;
             default:
                 console.log("Instrução não suportada: ", instruction);
