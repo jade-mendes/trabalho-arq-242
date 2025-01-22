@@ -84,8 +84,8 @@ class Mic1{
             case 'M[MAR] <- MBR':
                 this.memory[this.registers.MAR] = this.registers.MBR;
                 break;
-            case 'PC <- MBR':  
-                this.registers.PC = this.registers.MBR;
+            case 'PC <- MAR':  
+                this.registers.PC = this.registers.MAR;
                 break;
             case 'MBR <- M[MAR]':  
                 this.registers.MBR = this.memory[this.registers.MAR];
@@ -95,6 +95,10 @@ class Mic1{
                 break;
             case 'PC <- (AC > 0) ? MAR : PC':
                 this.registers.AC > 0 ? this.registers.PC = this.registers.MAR : this.registers.PC;
+                break;
+            case 'PC <- (AC === 0) ? MAR : PC':
+                this.registers.AC == 0 ? this.registers.PC = this.registers.MAR : this.registers.PC;
+                break;
             default:
                 console.log("Microinstrução não suportada: ", microOp);
                 break;
@@ -134,19 +138,19 @@ class Mic1{
                 this.registers.IR = "0100" + addressBit;
                 this.registers.MAR = address; // Carrega o endereço no MAR
                 this.execMicroInst('MBR <- M[MAR]');  // Lê o valor de memória
-                this.execMicroInst('PC <- (AC > 0) ? MAR : PC');  // Se AC > 0, pula para o valor de MBR
+                this.execMicroInst('PC <- (AC > 0) ? MAR : PC');  // Se AC > 0, pula para o endereço no MAR
                 break;
             case 'JZER': // Jump Zero
                 this.registers.IR = "0101" + addressBit;
                 this.registers.MAR = address; // Carrega o endereço no MAR
                 this.execMicroInst('MBR <- M[MAR]');  // Lê o valor de memória
-                this.execMicroInst('PC <- (AC === 0) ? MBR : PC');  // Se AC == 0, pula para o valor de MBR
+                this.execMicroInst('PC <- (AC === 0) ? MAR : PC');  // Se AC == 0, pula para o endereço no MAR
                 break;
             case 'JUMP': // Jump
                 this.registers.IR = "0110" + addressBit;
                 this.registers.MAR = address; // Carrega o endereço no MAR
                 this.execMicroInst('MBR <- M[MAR]');  // Lê o valor de memória
-                this.execMicroInst('PC <- MBR');  // Pula para o valor de MBR
+                this.execMicroInst('PC <- MAR');  // Pula para o endereço no MAR
                 break;
             case 'LOCO': // Load Constant
                 this.registers.IR = "0111" + addressBit;
